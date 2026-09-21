@@ -2,11 +2,13 @@ cff-version: 1.2.0
 message: "If you use this ontology, please cite it as below."
 title: "BEAO — Built Environment Accessibility Ontology"
 abstract: "A core OWL 2 DL ontology for machine-interpretable accessibility compliance in the built environment. Jurisdiction-agnostic, extensible via national modules. The Brazil module (beao-br) formalizes ABNT NBR 9050:2020. Includes semantic alignment with WHO ICF 2026-01."
-version: 0.1.0
-date-released: 2026-09-20
+version: 0.1.1
+date-released: 2026-09-21
+doi: 10.5281/zenodo.22866431
 license: CC-BY-4.0
 repository-code: https://github.com/ciatec-org/beao
 url: https://w3id.org/beao
+
 keywords:
   - accessibility
   - built environment
@@ -37,8 +39,9 @@ authors:
 preferred-citation:
   type: software
   title: "BEAO — Built Environment Accessibility Ontology"
-  version: 0.1.0
-  date-released: 2026-09-20
+  version: 0.1.1
+  date-released: 2026-09-21
+  doi: 10.5281/zenodo.22866431
   license: CC-BY-4.0
   repository-code: https://github.com/ciatec-org/beao
   url: https://w3id.org/beao

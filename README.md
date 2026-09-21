@@ -2,7 +2,7 @@
 
 ## Built Environment Accessibility Ontology
 
-Version: 0.1.0
+Version: 0.1.1
 
 BEAO is an ontology for representing accessibility concepts, requirements, elements and relationships in the built environment. The ontology is designed to support semantic representation, interoperability and machine-readable analysis of accessibility requirements.
 
@@ -21,7 +21,13 @@ The permanent identifier for BEAO is:
 
 https://w3id.org/beao
 
-Repository:
+## DOI
+
+The archived version of BEAO v0.1.1 is available at:
+
+https://doi.org/10.5281/zenodo.22866431
+
+## Repository
 
 https://github.com/ciatec-org/beao
 
