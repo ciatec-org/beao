@@ -1,0 +1,757 @@
+# ==============================================================================
+# BEAO — Built Environment Accessibility Ontology
+# Version: 0.1.0
+# URI base: https://w3id.org/beao#
+# License: CC BY 4.0
+# Pipeline: ONTOLOGY_MAKER
+#
+# This is the BEAO core ontology. It defines universal concepts, properties,
+# and functional capabilities for accessibility in the built environment.
+# It is normative-standard-agnostic and jurisdiction-agnostic.
+#
+# National modules (e.g., beao-br) import this ontology and extend it with:
+#   - Concrete PhysicalElement subclasses
+#   - Concrete SpaceType subclasses
+#   - AccessibilityRequirement instances
+#   - Condition instances
+#   - SHACL shapes with jurisdiction-specific values
+#
+# NOTE ON SPACETYPES AND REFERENCE MODULE:
+#   beao:SpaceType and beao:ReferenceModule are abstract classes in this core.
+#   National modules declare their own concrete subclasses/instances derived
+#   from local standards. Coincident concepts across modules (e.g., School,
+#   Pool) may be aligned via owl:equivalentClass without creating
+#   inter-module dependencies.
+# ==============================================================================
+
+@prefix beao:    <https://w3id.org/beao#> .
+@prefix bot:     <https://w3id.org/bot#> .
+# NOTE ON DUL: DUL is referenced by URI but not imported via owl:imports.
+# Rationale: full DUL introduces hundreds of concepts irrelevant to this domain.
+# Future work (v0.2.0): import a selective DUL-lite module or document as non-requirement.
+@prefix dul:     <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix earl:    <http://www.w3.org/ns/earl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix qudt:    <http://qudt.org/schema/qudt/> .
+@prefix unit:    <http://qudt.org/vocab/unit/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix icf:     <http://hl7.org/fhir/sid/icf/> .
+
+# ==============================================================================
+# ONTOLOGY METADATA
+# ==============================================================================
+
+<https://w3id.org/beao>
+    a owl:Ontology ;
+    rdfs:label "BEAO — Built Environment Accessibility Ontology"@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:description "A core OWL 2 DL ontology for machine-interpretable accessibility compliance in the built environment. Jurisdiction-agnostic. Intended to be extended by national modules (e.g., beao-br for Brazil / ABNT NBR 9050:2020)."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:creator "Eduardo Dati Dias" ;
+    dcterms:creator "Jean Orlando" ;
+    dcterms:creator "Carlos Bandeira de Mello Monteiro" ;
+    rdfs:comment "National modules import this ontology and add concrete PhysicalElements, SpaceTypes, AccessibilityRequirements, Conditions, and SHACL shapes derived from their respective normative standards."@en ;
+    rdfs:seeAlso <http://hl7.org/fhir/sid/icf> ;
+    rdfs:seeAlso <https://hl7.org/fhir/6.0.0-snapshot1/references.html> ;
+    owl:imports <https://w3id.org/bot> ;
+    owl:imports <http://www.w3.org/ns/earl> ;
+    owl:imports <http://www.w3.org/ns/prov-o> ;
+    owl:imports <http://www.w3.org/2004/02/skos/core> .
+
+# ==============================================================================
+# SECTION 1 — ANNOTATION PROPERTIES
+# ==============================================================================
+
+beao:normativeReference a owl:AnnotationProperty ;
+    rdfs:label "normative reference"@en ;
+    rdfs:comment "Reference to the clause in the applicable normative standard. Populated by national modules."@en .
+
+beao:normVersion a owl:AnnotationProperty ;
+    rdfs:label "norm version"@en ;
+    rdfs:comment "Version identifier of the normative standard. Populated by national modules."@en .
+
+# ==============================================================================
+# SECTION 2 — CORE CONCEPTS
+# ==============================================================================
+
+beao:Accessibility
+    a owl:Class ;
+    rdfs:subClassOf dul:Situation ;
+    rdfs:label "Accessibility"@en ;
+    skos:definition "A relational situation between a person and the built environment, enabling or constraining participation."@en .
+
+beao:ReferenceModule
+    a owl:Class ;
+    rdfs:label "Reference Module"@en ;
+    rdfs:comment "Abstract class. Represents the floor projection used as a spatial reference for wheelchair users. National modules declare concrete instances with jurisdiction-specific dimensions."@en .
+
+# ==============================================================================
+# SECTION 3 — USAGE PROFILES AND FUNCTIONAL CAPABILITIES
+# ==============================================================================
+
+beao:UsageProfile
+    a owl:Class ;
+    rdfs:subClassOf dul:Role ;
+    rdfs:label "Usage Profile"@en ;
+    rdfs:comment "A set of functional capabilities required by a space. Models environmental demand, not personal classification."@en .
+
+beao:PCR_UsageProfile a beao:UsageProfile ;
+    rdfs:label "Wheelchair User Profile"@en ;
+    skos:altLabel "P.C.R."@en .
+
+beao:PMR_UsageProfile a beao:UsageProfile ;
+    rdfs:label "Reduced Mobility Profile"@en ;
+    skos:altLabel "P.M.R."@en .
+
+beao:PDV_UsageProfile a beao:UsageProfile ;
+    rdfs:label "Visual Impairment Profile"@en ;
+    skos:altLabel "P.D.V."@en .
+
+beao:PO_UsageProfile a beao:UsageProfile ;
+    rdfs:label "Obese Person Profile"@en ;
+    skos:altLabel "P.O."@en .
+
+beao:FunctionalCapability
+    a owl:Class ;
+    rdfs:subClassOf dul:Role ;
+    rdfs:label "Functional Capability"@en ;
+    rdfs:comment "A capability that the built environment must afford, following universal design principles. Jurisdiction-agnostic — derived from human functional diversity, not from any single normative standard."@en .
+
+beao:IndependentWheelchairNavigation a beao:FunctionalCapability ;
+    rdfs:label "Independent Wheelchair Navigation"@en .
+
+beao:WheelchairTransfer a beao:FunctionalCapability ;
+    rdfs:label "Wheelchair Transfer"@en .
+
+beao:IndependentWheelchairApproach a beao:FunctionalCapability ;
+    rdfs:label "Independent Wheelchair Approach"@en .
+
+beao:ReducedGraspStrength a beao:FunctionalCapability ;
+    rdfs:label "Reduced Grasp Strength Accommodation"@en .
+
+beao:IndependentVisualNavigation a beao:FunctionalCapability ;
+    rdfs:label "Independent Visual Navigation"@en .
+
+beao:VisualPerception a beao:FunctionalCapability ;
+    rdfs:label "Visual Perception"@en .
+
+beao:AuditoryPerception a beao:FunctionalCapability ;
+    rdfs:label "Auditory Perception"@en .
+
+beao:DualSensorySignage a beao:FunctionalCapability ;
+    rdfs:label "Dual Sensory Signage"@en ;
+    skos:note "Two-senses principle: information must be perceivable through at least two sensory channels simultaneously."@en .
+
+beao:LargeBodyAccommodation a beao:FunctionalCapability ;
+    rdfs:label "Large Body Accommodation"@en .
+
+beao:IndependentEmergencyEvacuation a beao:FunctionalCapability ;
+    rdfs:label "Independent Emergency Evacuation"@en .
+
+beao:SafeIndependentUse a beao:FunctionalCapability ;
+    rdfs:label "Safe Independent Use"@en .
+
+beao:ReducedMobilityNavigation a beao:FunctionalCapability ;
+    rdfs:label "Reduced Mobility Navigation"@en .
+
+# UsageProfile → FunctionalCapability associations
+
+beao:requiresCapability
+    a owl:ObjectProperty ;
+    rdfs:domain beao:UsageProfile ;
+    rdfs:range beao:FunctionalCapability ;
+    rdfs:label "requires capability"@en ;
+    owl:inverseOf beao:isRequiredByProfile .
+
+beao:isRequiredByProfile
+    a owl:ObjectProperty ;
+    rdfs:domain beao:FunctionalCapability ;
+    rdfs:range beao:UsageProfile ;
+    rdfs:label "is required by profile"@en .
+
+beao:PCR_UsageProfile
+    beao:requiresCapability beao:IndependentWheelchairNavigation ;
+    beao:requiresCapability beao:WheelchairTransfer ;
+    beao:requiresCapability beao:IndependentWheelchairApproach .
+
+beao:PMR_UsageProfile
+    beao:requiresCapability beao:ReducedMobilityNavigation ;
+    beao:requiresCapability beao:ReducedGraspStrength .
+
+beao:PDV_UsageProfile
+    beao:requiresCapability beao:IndependentVisualNavigation ;
+    beao:requiresCapability beao:DualSensorySignage .
+
+beao:PO_UsageProfile
+    beao:requiresCapability beao:LargeBodyAccommodation .
+
+# ==============================================================================
+# SECTION 4 — REQUIREMENTS AND CONFORMITY
+# ==============================================================================
+
+beao:AccessibilityRequirement
+    a owl:Class ;
+    rdfs:subClassOf earl:TestCriterion ;
+    rdfs:label "Accessibility Requirement"@en ;
+    rdfs:comment "A normative requirement derived from an accessibility standard. Subclasses distinguish mandatory from recommended requirements. Instances are declared by national modules."@en .
+
+beao:MandatoryRequirement
+    a owl:Class ;
+    rdfs:subClassOf beao:AccessibilityRequirement ;
+    rdfs:label "Mandatory Requirement"@en ;
+    skos:note "Expressed by 'shall' or equivalent in the applicable normative standard."@en .
+
+beao:RecommendedRequirement
+    a owl:Class ;
+    rdfs:subClassOf beao:AccessibilityRequirement ;
+    rdfs:label "Recommended Requirement"@en ;
+    skos:note "Expressed by 'should' or equivalent in the applicable normative standard."@en .
+
+beao:Intervention
+    a owl:Class ;
+    rdfs:label "Intervention"@en ;
+    rdfs:comment "Type of construction or adaptation intervention that modulates requirement applicability."@en .
+
+beao:NewConstruction
+    a owl:Class ;
+    rdfs:subClassOf beao:Intervention ;
+    rdfs:label "New Construction"@en .
+
+beao:Renovation
+    a owl:Class ;
+    rdfs:subClassOf beao:Intervention ;
+    rdfs:label "Renovation"@en .
+
+beao:Adaptation
+    a owl:Class ;
+    rdfs:subClassOf beao:Intervention ;
+    rdfs:label "Adaptation"@en .
+
+beao:UserContext
+    a owl:Class ;
+    rdfs:label "User Context"@en ;
+    rdfs:comment "Context qualifier for requirements that differ by user age or group."@en .
+
+beao:Adult
+    a owl:Class ;
+    rdfs:subClassOf beao:UserContext ;
+    rdfs:label "Adult"@en .
+
+beao:Child
+    a owl:Class ;
+    rdfs:subClassOf beao:UserContext ;
+    rdfs:label "Child"@en .
+
+beao:Condition
+    a owl:Class ;
+    rdfs:label "Condition"@en ;
+    rdfs:comment "Abstract class. A physical or contextual condition that modulates the applicability of a requirement. Concrete instances are declared by national modules."@en .
+
+beao:ConformityAssessment
+    a owl:Class ;
+    rdfs:subClassOf earl:Assertion ;
+    rdfs:label "Conformity Assessment"@en ;
+    rdfs:comment "Extension of earl:Assertion for the physical built environment. Links a physical element to an accessibility requirement and records the measurement outcome."@en .
+
+# ==============================================================================
+# SECTION 5 — SPACES
+# ==============================================================================
+
+beao:CirculationArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Circulation Area"@en .
+
+beao:ManeuveringArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Maneuvering Area"@en .
+
+beao:ApproachArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Approach Area"@en .
+
+beao:TransferArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Transfer Area"@en .
+
+beao:RescueArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Rescue Area"@en .
+
+beao:WheelchairSpace
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Wheelchair Space"@en .
+
+beao:GuideDogSpace
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Guide Dog Space"@en .
+
+beao:SignLanguageInterpreterArea
+    a owl:Class ;
+    rdfs:subClassOf bot:Space ;
+    rdfs:label "Sign Language Interpreter Area"@en .
+
+beao:SpaceType
+    a owl:Class ;
+    rdfs:subClassOf bot:Zone ;
+    rdfs:label "Space Type"@en ;
+    rdfs:comment "Abstract class. Represents a typology of built environment space. National modules declare concrete subclasses derived from their normative standards (e.g., beao-br:EventSpace from NBR 9050 §10). Coincident concepts across modules may be aligned via owl:equivalentClass."@en .
+
+# ==============================================================================
+# SECTION 6 — PHYSICAL ELEMENTS
+# ==============================================================================
+
+beao:PhysicalElement
+    a owl:Class ;
+    rdfs:subClassOf bot:Element ;
+    rdfs:subClassOf earl:TestSubject ;
+    rdfs:label "Physical Element"@en ;
+    rdfs:comment "Extension of earl:TestSubject to the physical built environment. BEAO extends EARL beyond digital accessibility. Concrete subclasses are declared by national modules."@en .
+
+beao:AccessibleRoute
+    a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Route"@en ;
+    rdfs:comment "A continuous, unobstructed path connecting accessible elements. Modeled as a composite via beao:hasRouteElement."@en .
+
+# ==============================================================================
+# SECTION 7 — OBJECT PROPERTIES
+# ==============================================================================
+
+beao:hasRouteElement
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibleRoute ;
+    rdfs:range owl:Thing ;
+    rdfs:label "has route element"@en ;
+    rdfs:comment "Links an accessible route to its constituent physical elements without duplicating them."@en .
+
+beao:addressesCapability
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:range beao:FunctionalCapability ;
+    rdfs:label "addresses capability"@en .
+
+beao:appliesTo
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:label "applies to"@en ;
+    rdfs:comment "Links a requirement to the physical element or space type it targets."@en .
+
+beao:appliesIn
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:label "applies in"@en ;
+    rdfs:comment "Links a requirement to its applicable context: an Intervention type (e.g., NewConstruction) or a SpaceType (e.g., EventSpace)."@en .
+
+beao:userContext
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:range beao:UserContext ;
+    rdfs:label "user context"@en .
+
+beao:condition
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:range beao:Condition ;
+    rdfs:label "condition"@en ;
+    rdfs:comment "A physical or contextual condition that modulates the applicability of this requirement."@en .
+
+beao:requires
+    a owl:ObjectProperty ;
+    rdfs:domain beao:AccessibilityRequirement ;
+    rdfs:range beao:PhysicalElement ;
+    rdfs:label "requires"@en ;
+    rdfs:comment "A physical element that must be present to satisfy this requirement."@en .
+
+beao:assessedElement
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf earl:subject ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range beao:PhysicalElement ;
+    rdfs:label "assessed element"@en .
+
+beao:appliedRequirement
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf earl:test ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range beao:AccessibilityRequirement ;
+    rdfs:label "applied requirement"@en .
+
+beao:outcome
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf earl:result ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:label "outcome"@en .
+
+beao:observedUnit
+    a owl:ObjectProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range qudt:Unit ;
+    rdfs:label "observed unit"@en ;
+    rdfs:comment "Unit travels with the measured value to avoid ambiguity."@en .
+
+beao:measuredProperty
+    a owl:ObjectProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:label "measured property"@en .
+
+beao:hasHandle
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:label "has handle"@en .
+
+beao:hasSupportBar
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:label "has support bar"@en .
+
+beao:hasManeuveringArea
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:range beao:ManeuveringArea ;
+    rdfs:label "has maneuvering area"@en .
+
+beao:hasApproachArea
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:range beao:ApproachArea ;
+    rdfs:label "has approach area"@en .
+
+beao:hasTransferArea
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:range beao:TransferArea ;
+    rdfs:label "has transfer area"@en .
+
+beao:hasWheelchairSpace
+    a owl:ObjectProperty ;
+    rdfs:domain beao:SpaceType ;
+    rdfs:range beao:WheelchairSpace ;
+    rdfs:label "has wheelchair space"@en .
+
+beao:hasAccessibleRoute
+    a owl:ObjectProperty ;
+    rdfs:range beao:AccessibleRoute ;
+    rdfs:label "has accessible route"@en .
+
+beao:adjacentToAccessibleRoute
+    a owl:ObjectProperty ;
+    rdfs:domain beao:PhysicalElement ;
+    rdfs:range beao:AccessibleRoute ;
+    rdfs:label "adjacent to accessible route"@en .
+
+# ==============================================================================
+# SECTION 8 — DATATYPE PROPERTIES (measurement vocabulary)
+# ==============================================================================
+
+beao:clearWidth
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "clear width"@en .
+
+beao:clearHeight
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "clear height"@en .
+
+beao:width
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "width"@en .
+
+beao:length
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "length"@en .
+
+beao:height
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "height"@en .
+
+beao:depth
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "depth"@en .
+
+beao:diameter
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "diameter"@en .
+
+beao:installationHeight
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "installation height"@en .
+
+beao:wallClearance
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "wall clearance"@en .
+
+beao:clearanceHeight
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "clearance height"@en ;
+    rdfs:comment "Minimum vertical clearance under a horizontal surface."@en .
+
+beao:clearanceDepth
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "clearance depth"@en .
+
+beao:extensionLength
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "extension length"@en .
+
+beao:lateralClearance
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "lateral clearance"@en .
+
+beao:frontalClearance
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:M ;
+    rdfs:label "frontal clearance"@en .
+
+beao:longitudinalSlope
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:PERCENT ;
+    rdfs:label "longitudinal slope"@en .
+
+beao:transverseSlope
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:PERCENT ;
+    rdfs:label "transverse slope"@en .
+
+beao:maxSlope
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:PERCENT ;
+    rdfs:label "maximum slope"@en .
+
+beao:openingForce
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:N ;
+    rdfs:label "opening force"@en .
+
+beao:minimumIlluminance
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:LUX ;
+    rdfs:label "minimum illuminance"@en .
+
+beao:LRVdifference
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "LRV difference"@en ;
+    rdfs:comment "Light Reflectance Value difference between adjacent surfaces."@en .
+
+beao:minimumAccessibleProportion
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:PERCENT ;
+    rdfs:label "minimum accessible proportion"@en .
+
+beao:minimumAccessibleUnits
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:integer ;
+    rdfs:label "minimum accessible units"@en .
+
+beao:sectionDiameter
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    qudt:applicableUnit unit:MilliM ;
+    rdfs:label "section diameter"@en .
+
+beao:isNonSlip
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is non-slip"@en .
+
+beao:isFirm
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is firm"@en .
+
+beao:isStable
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is stable"@en .
+
+beao:hasSharpEdges
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "has sharp edges"@en .
+
+beao:singleMovementOpening
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "single movement opening"@en .
+
+beao:observedValue
+    a owl:DatatypeProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed value"@en .
+
+beao:requiredMinValue
+    a owl:DatatypeProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "required minimum value"@en .
+
+beao:requiredMaxValue
+    a owl:DatatypeProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "required maximum value"@en .
+
+beao:requiredExactValue
+    a owl:DatatypeProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "required exact value"@en .
+
+# ==============================================================================
+# SECTION 9 — INFERENCE PROPERTY CHAINS
+#
+# These chains allow an OWL 2 DL reasoner to infer, from a ConformityAssessment,
+# which ICF environmental factors and activities are facilitated or barred,
+# and which UsageProfiles are impacted — without external logic.
+#
+# Full inference chain:
+#   ConformityAssessment
+#     → (beao:appliedRequirement) → AccessibilityRequirement
+#     → (beao:addressesCapability) → FunctionalCapability
+#     → (beao:removesBarrierTo / beao:relatedToActivity) → icf:eXXX / icf:dXXX
+#
+# ICF qualification (documented as annotation — not SWRL, which exits OWL 2 DL):
+#   ConformityAssessment [earl:passed]  → environment as facilitator (e+)
+#   ConformityAssessment [earl:failed]  → environment as barrier (e.)
+#
+# SWRL rules for conditional inference (passed/failed → ICF qualifier) were
+# evaluated and rejected — they exit OWL 2 DL profile.
+# Implementation as SPARQL CONSTRUCT is registered as future work.
+# ==============================================================================
+
+beao:assessmentImpactsProfile
+    a owl:ObjectProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range beao:UsageProfile ;
+    rdfs:label "assessment impacts profile"@en ;
+    skos:definition "Infers, from a ConformityAssessment, which UsageProfiles are impacted. ConformityAssessment [earl:failed] → profiles that depend on the assessed capability cannot use the element independently."@en ;
+    owl:propertyChainAxiom (
+        beao:appliedRequirement
+        beao:addressesCapability
+        beao:isRequiredByProfile
+    ) .
+
+beao:assessmentRemovesBarrierTo
+    a owl:ObjectProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range owl:Thing ;
+    rdfs:label "assessment removes barrier to"@en ;
+    skos:definition "Infers, from a ConformityAssessment, the ICF environmental factor (e code) that the environment facilitates (earl:passed → e+) or bars (earl:failed → e.)."@en ;
+    owl:propertyChainAxiom (
+        beao:appliedRequirement
+        beao:addressesCapability
+        beao:removesBarrierTo
+    ) .
+
+beao:assessmentRelatedToActivity
+    a owl:ObjectProperty ;
+    rdfs:domain beao:ConformityAssessment ;
+    rdfs:range owl:Thing ;
+    rdfs:label "assessment related to activity"@en ;
+    skos:definition "Infers, from a ConformityAssessment, the ICF activity/participation code (d code) whose exercise would be compromised if the environment fails the assessed requirement."@en ;
+    owl:propertyChainAxiom (
+        beao:appliedRequirement
+        beao:addressesCapability
+        beao:relatedToActivity
+    ) .
+
+# ==============================================================================
+# SECTION 10 — ICF ALIGNMENT PROPERTIES (WHO ICF 2026-01)
+#
+# Decision CD-08: FunctionalCapability → ICF mappings belong to
+# beao-icf-alignment.ttl, not to this core.
+# Rationale: core stability. Adding an ICF code discovered in a new national
+# module should not force a core version bump. This core declares only the
+# property signatures and the icfSystem annotation property.
+# All concrete mappings live in beao-icf-alignment.ttl.
+#
+# ICF coding system reference:
+#   FHIR CodeSystem: http://hl7.org/fhir/sid/icf
+#   FHIR 6.0.0-snapshot1: https://hl7.org/fhir/6.0.0-snapshot1/references.html
+#   Authority: WHO ICF 2026-01
+#
+# Notation: e. (dot suffix) = barrier qualifier per WHO ICF convention.
+#
+# Inclusion criteria (CI-07, applied in alignment module):
+#   (1) The built environment can directly improve or worsen the ICF factor
+#   (2) A normative standard in at least one national module addresses the code
+# ==============================================================================
+
+beao:icfSystem
+    a owl:AnnotationProperty ;
+    rdfs:label "ICF coding system"@en ;
+    rdfs:comment "Identifies the ICF coding system used for FHIR interoperability. Value: http://hl7.org/fhir/sid/icf"@en .
+
+beao:removesBarrierTo
+    a owl:ObjectProperty ;
+    rdfs:domain beao:FunctionalCapability ;
+    rdfs:label "removes barrier to"@en ;
+    rdfs:comment "Links a FunctionalCapability to an ICF environmental factor (e-code) that the built environment addresses as a barrier. ICF notation: e. (dot) = barrier. Concrete mappings in beao-icf-alignment.ttl."@en .
+
+beao:relatedToActivity
+    a owl:ObjectProperty ;
+    rdfs:domain beao:FunctionalCapability ;
+    rdfs:label "related to activity"@en ;
+    rdfs:comment "Links a FunctionalCapability to an ICF activity/participation code (d-code). Concrete mappings in beao-icf-alignment.ttl."@en .
+
+# ==============================================================================
+# SECTION 11 — PROVENANCE (PROV-O)
+# ==============================================================================
+
+beao:BEAOOntologyProcess a prov:Activity ;
+    rdfs:label "BEAO ONTOLOGY_MAKER Pipeline"@en ;
+    rdfs:comment "The engineering process that produced this ontology, following the ONTOLOGY_MAKER methodology."@en .
+
+<https://w3id.org/beao>
+    prov:wasGeneratedBy beao:BEAOOntologyProcess .
+
+# ==============================================================================
+# END OF FILE — beao.ttl v0.1.0 — https://w3id.org/beao
+# CD-08: ICF mappings in beao-icf-alignment.ttl (not in core)
+# ==============================================================================

@@ -1,0 +1,1107 @@
+# ==============================================================================
+# BEAO-BR — Built Environment Accessibility Ontology — Brazil Module
+# Version: 0.1.0
+# URI base: https://w3id.org/beao/br#
+# Imports: https://w3id.org/beao (BEAO core v0.1.0)
+# Normative source: ABNT NBR 9050:2020 (corrected version 25.01.2021)
+# License: CC BY 4.0
+#
+# This module extends the BEAO core ontology with:
+#   - Concrete PhysicalElement subclasses derived from NBR 9050:2020
+#   - Concrete SpaceType subclasses (§10 typologies)
+#   - AccessibilityRequirement instances (§3–§10, 212 claims)
+#   - Condition instances
+#   - SHACL shapes with NBR 9050:2020 specific values
+#   - ReferenceModule instance (M.R. 0.80m × 1.20m)
+#   - Provenance linked to ABNT NBR 9050:2020
+#
+# NOTE ON SPACETYPES:
+#   Concrete SpaceTypes (EventSpace, School, Pool, etc.) are declared here
+#   as subclasses of beao:SpaceType, derived from §10 of NBR 9050:2020.
+#   These are Brazilian normative typologies. Concepts coincident with other
+#   national modules may be aligned via owl:equivalentClass without creating
+#   inter-module dependencies.
+#
+# ==============================================================================
+
+@prefix beao-br: <https://w3id.org/beao/br#> .
+@prefix beao:    <https://w3id.org/beao#> .
+@prefix bot:     <https://w3id.org/bot#> .
+@prefix earl:    <http://www.w3.org/ns/earl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix qudt:    <http://qudt.org/schema/qudt/> .
+@prefix unit:    <http://qudt.org/vocab/unit/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# ==============================================================================
+# ONTOLOGY METADATA
+# ==============================================================================
+
+<https://w3id.org/beao/br>
+    a owl:Ontology ;
+    rdfs:label "BEAO-BR — Built Environment Accessibility Ontology — Brazil Module"@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:description "Brazilian national module of the BEAO core ontology. Formalizes accessibility requirements from ABNT NBR 9050:2020 as machine-interpretable OWL 2 DL axioms and SHACL shapes. Contains 212 normative claims (§3–§10)."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:creator "Eduardo Dati Dias" ;
+    dcterms:creator "Jean Orlando" ;
+    dcterms:creator "Carlos Bandeira de Mello Monteiro" ;
+    beao:normVersion "NBR9050:2020" ;
+    prov:wasDerivedFrom <https://www.abnt.org.br/normalizacao/lista-de-publicacoes/abnt?ID=1311> ;
+    owl:imports <https://w3id.org/beao> .
+
+# ==============================================================================
+# SECTION 1 — REFERENCE MODULE (NBR 9050:2020 §4.2.2)
+# ==============================================================================
+
+beao-br:ReferenceModule_NBR9050
+    a beao:ReferenceModule ;
+    rdfs:label "Reference Module — NBR 9050:2020"@en ;
+    beao:width 0.80 ;
+    beao:length 1.20 ;
+    skos:note "Floor projection of a wheelchair user: 0.80m × 1.20m — §4.2.2 NBR 9050:2020"@en ;
+    beao:normativeReference "4.2.2 NBR 9050:2020" .
+
+# ==============================================================================
+# SECTION 2 — CONDITIONS (NBR 9050:2020 specific)
+# ==============================================================================
+
+beao-br:NoLateralWalls a beao:Condition ;
+    rdfs:label "No lateral walls"@en ;
+    beao:normativeReference "6.6.2.8 NBR 9050:2020" .
+
+beao-br:HasRevolvingDoor a beao:Condition ;
+    rdfs:label "Has revolving door"@en ;
+    beao:normativeReference "6.2.7 NBR 9050:2020" .
+
+beao-br:HasSecurityDevice a beao:Condition ;
+    rdfs:label "Has security device"@en ;
+    beao:normativeReference "6.2.5 NBR 9050:2020" .
+
+beao-br:HasMultipleFloors a beao:Condition ;
+    rdfs:label "Has multiple floors"@en ;
+    beao:normativeReference "6.10.2 NBR 9050:2020" .
+
+beao-br:IsExistingBuilding a beao:Condition ;
+    rdfs:label "Is existing building"@en ;
+    beao:normativeReference "6.2.2 NBR 9050:2020" .
+
+beao-br:HasLateralWall a beao:Condition ;
+    rdfs:label "Has lateral wall"@en ;
+    beao:normativeReference "7.7.2.2.1 NBR 9050:2020" .
+
+beao-br:HasNoLateralWall a beao:Condition ;
+    rdfs:label "Has no lateral wall"@en ;
+    beao:normativeReference "7.7.2.4 NBR 9050:2020" .
+
+beao-br:NoisyEnvironment a beao:Condition ;
+    rdfs:label "Noisy environment"@en ;
+    beao:normativeReference "9.2.1.7 NBR 9050:2020" .
+
+beao-br:HasSecurityPartition a beao:Condition ;
+    rdfs:label "Has security partition"@en ;
+    beao:normativeReference "9.2.1.7 NBR 9050:2020" .
+
+beao-br:TotalPositionsAboveSix a beao:Condition ;
+    rdfs:label "Total service positions above six"@en ;
+    beao:normativeReference "9.2.1.6 NBR 9050:2020" .
+
+beao-br:PerimeterUpTo90m a beao:Condition ;
+    rdfs:label "Pool perimeter up to 90m"@en ;
+    beao:normativeReference "10.12.2 NBR 9050:2020" .
+
+beao-br:PerimeterAbove90m a beao:Condition ;
+    rdfs:label "Pool perimeter above 90m"@en ;
+    beao:normativeReference "10.12.2 NBR 9050:2020" .
+
+beao-br:HasInfrastructure a beao:Condition ;
+    rdfs:label "Has infrastructure"@en ;
+    beao:normativeReference "10.13.1 NBR 9050:2020" .
+
+beao-br:PhysicalAdaptationImpractical a beao:Condition ;
+    rdfs:label "Physical adaptation impractical"@en ;
+    beao:normativeReference "10.2.2 NBR 9050:2020" .
+
+beao-br:HeightUpTo60cm a beao:Condition ;
+    rdfs:label "Stage height up to 60cm"@en ;
+    beao:normativeReference "10.4.3 NBR 9050:2020" .
+
+beao-br:HeightAbove60cm a beao:Condition ;
+    rdfs:label "Stage height above 60cm"@en ;
+    beao:normativeReference "10.4.3 NBR 9050:2020" .
+
+# ==============================================================================
+# SECTION 3 — SPACE TYPES (NBR 9050:2020 §10)
+#
+# Concrete subclasses of beao:SpaceType derived from §10 typologies.
+# These represent Brazilian normative space categories.
+# ==============================================================================
+
+beao-br:EventSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Event Space"@en ;
+    beao:normativeReference "10.3 NBR 9050:2020" .
+
+beao-br:ExhibitionSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Exhibition Space"@en ;
+    beao:normativeReference "10.7 NBR 9050:2020" .
+
+beao-br:FoodServiceSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Food Service Space"@en ;
+    beao:normativeReference "10.8 NBR 9050:2020" .
+
+beao-br:HospitalitySpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Hospitality Space"@en ;
+    beao:normativeReference "10.9 NBR 9050:2020" .
+
+beao-br:HealthCareSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Health Care Space"@en ;
+    beao:normativeReference "10.10 NBR 9050:2020" .
+
+beao-br:OutpatientSpace a owl:Class ;
+    rdfs:subClassOf beao-br:HealthCareSpace ;
+    rdfs:label "Outpatient Space"@en .
+
+beao-br:WaitingArea a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Waiting Area"@en .
+
+beao-br:SportsFacility a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Sports Facility"@en ;
+    beao:normativeReference "10.11 NBR 9050:2020" .
+
+beao-br:Pool a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Pool"@en ;
+    beao:normativeReference "10.12 NBR 9050:2020" .
+
+beao-br:Park a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Park"@en ;
+    beao:normativeReference "10.13 NBR 9050:2020" .
+
+beao-br:ProtectedNaturalArea a owl:Class ;
+    rdfs:subClassOf beao-br:Park ;
+    rdfs:label "Protected Natural Area"@en .
+
+beao-br:Beach a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Beach"@en ;
+    beao:normativeReference "10.14 NBR 9050:2020" .
+
+beao-br:School a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "School"@en ;
+    beao:normativeReference "10.15 NBR 9050:2020" .
+
+beao-br:Library a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Library"@en ;
+    beao:normativeReference "10.16 NBR 9050:2020" .
+
+beao-br:RetailSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Retail Space"@en ;
+    beao:normativeReference "10.17 NBR 9050:2020" .
+
+beao-br:Bank a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Bank"@en ;
+    beao:normativeReference "10.18 NBR 9050:2020" .
+
+beao-br:PublicServiceSpace a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Public Service Space"@en ;
+    beao:normativeReference "10.19 NBR 9050:2020" .
+
+beao-br:SecurityFacility a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Security Facility"@en ;
+    beao:normativeReference "10.20 NBR 9050:2020" .
+
+beao-br:HeritageBuilding a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Heritage Building"@en ;
+    beao:normativeReference "10.2 NBR 9050:2020" .
+
+beao-br:AccessibleBedroom a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Accessible Bedroom"@en ;
+    beao:normativeReference "10.9.2 NBR 9050:2020" .
+
+beao-br:AccessibleDressingRoom a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Accessible Dressing Room"@en ;
+    beao:normativeReference "10.6 NBR 9050:2020" .
+
+beao-br:AccessibleFittingRoom a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Accessible Fitting Room"@en ;
+    beao:normativeReference "10.17.2 NBR 9050:2020" .
+
+beao-br:AccessibleCell a owl:Class ;
+    rdfs:subClassOf beao:SpaceType ;
+    rdfs:label "Accessible Cell"@en ;
+    beao:normativeReference "10.20.3 NBR 9050:2020" .
+
+# ==============================================================================
+# SECTION 4 — PHYSICAL ELEMENTS (NBR 9050:2020)
+# Concrete subclasses of beao:PhysicalElement
+# ==============================================================================
+
+# --- Floors ---
+
+beao-br:Floor a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Floor"@en ;
+    beao:normativeReference "6.3 NBR 9050:2020" .
+
+beao-br:TactileFloor a owl:Class ;
+    rdfs:subClassOf beao-br:Floor ;
+    rdfs:label "Tactile Floor"@en ;
+    beao:normativeReference "3.1.29 NBR 9050:2020" .
+
+beao-br:AlertTactileFloor a owl:Class ;
+    rdfs:subClassOf beao-br:TactileFloor ;
+    rdfs:label "Alert Tactile Floor"@en .
+
+beao-br:DirectionalTactileFloor a owl:Class ;
+    rdfs:subClassOf beao-br:TactileFloor ;
+    rdfs:label "Directional Tactile Floor"@en .
+
+beao-br:DrainGrate a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Drain Grate"@en ;
+    beao:normativeReference "6.3.5 NBR 9050:2020" .
+
+beao-br:TreeGrate a owl:Class ;
+    rdfs:subClassOf beao-br:DrainGrate ;
+    rdfs:label "Tree Grate"@en ;
+    beao:normativeReference "8.8.4 NBR 9050:2020" .
+
+# --- Routes and Ramps ---
+
+beao-br:Ramp a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Ramp"@en ;
+    skos:note "Longitudinal slope >= 5% — §3.1.30 NBR 9050:2020"@en .
+
+beao-br:RampSegment a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Ramp Segment"@en ;
+    beao:normativeReference "6.6.2.7 NBR 9050:2020" .
+
+beao-br:RampLanding a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Ramp Landing"@en ;
+    beao:normativeReference "6.6.4 NBR 9050:2020" .
+
+beao-br:StageAccessRamp a owl:Class ;
+    rdfs:subClassOf beao-br:Ramp ;
+    rdfs:label "Stage Access Ramp"@en ;
+    beao:normativeReference "10.4.3 NBR 9050:2020" .
+
+beao-br:PoolAccessRamp a owl:Class ;
+    rdfs:subClassOf beao-br:Ramp ;
+    rdfs:label "Pool Access Ramp"@en ;
+    beao:normativeReference "10.12.2.3 NBR 9050:2020" .
+
+beao-br:BeachAccessRamp a owl:Class ;
+    rdfs:subClassOf beao-br:Ramp ;
+    rdfs:label "Beach Access Ramp"@en ;
+    beao:normativeReference "10.14.1 NBR 9050:2020" .
+
+beao-br:Staircase a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Staircase"@en ;
+    beao:normativeReference "6.8 NBR 9050:2020" .
+
+beao-br:Step a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Step"@en ;
+    beao:normativeReference "6.7 NBR 9050:2020" .
+
+beao-br:IsolatedStep a owl:Class ;
+    rdfs:subClassOf beao-br:Step ;
+    rdfs:label "Isolated Step"@en .
+
+beao-br:Sidewalk a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Sidewalk"@en ;
+    beao:normativeReference "6.12 NBR 9050:2020" .
+
+beao-br:DisabledParkingSpace a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Disabled Parking Space"@en ;
+    beao:normativeReference "6.14 NBR 9050:2020" .
+
+# --- Vertical Circulation ---
+
+beao-br:Elevator a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Elevator"@en ;
+    beao:normativeReference "6.10.2 NBR 9050:2020" .
+
+beao-br:LiftingPlatform a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Lifting Platform"@en ;
+    beao:normativeReference "6.10.3 NBR 9050:2020" .
+
+# --- Entrances and Doors ---
+
+beao-br:BuildingEntrance a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Building Entrance"@en ;
+    beao:normativeReference "6.2.1 NBR 9050:2020" .
+
+beao-br:Door a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Door"@en ;
+    beao:normativeReference "6.11.2 NBR 9050:2020" .
+
+beao-br:SanitaryDoor a owl:Class ;
+    rdfs:subClassOf beao-br:Door ;
+    rdfs:label "Sanitary Door"@en ;
+    beao:normativeReference "6.11.2.7 NBR 9050:2020" .
+
+beao-br:SportsFacilityDoor a owl:Class ;
+    rdfs:subClassOf beao-br:Door ;
+    rdfs:label "Sports Facility Door"@en ;
+    beao:normativeReference "6.11.2.4 NBR 9050:2020" .
+
+beao-br:RevolvingDoor a owl:Class ;
+    rdfs:subClassOf beao-br:Door ;
+    rdfs:label "Revolving Door"@en ;
+    beao:normativeReference "6.2.7 NBR 9050:2020" .
+
+beao-br:EscapeRouteDoor a owl:Class ;
+    rdfs:subClassOf beao-br:Door ;
+    rdfs:label "Escape Route Door"@en ;
+    beao:normativeReference "6.4.1.1 NBR 9050:2020" .
+
+beao-br:AccessControlDevice a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Access Control Device"@en ;
+    beao:normativeReference "6.2.5 NBR 9050:2020" .
+
+beao-br:AccessiblePassage a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Passage"@en ;
+    beao:normativeReference "9.4.1.1 NBR 9050:2020" .
+
+# --- Handles and Bars ---
+
+beao-br:Handrail a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Handrail"@en ;
+    beao:normativeReference "6.9.3 NBR 9050:2020" .
+
+beao-br:SupportBar a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Support Bar"@en ;
+    beao:normativeReference "7.6 NBR 9050:2020" .
+
+beao-br:LateralSupportBar a owl:Class ;
+    rdfs:subClassOf beao-br:SupportBar ;
+    rdfs:label "Lateral Support Bar"@en ;
+    beao:normativeReference "7.7.2.2.1 NBR 9050:2020" .
+
+beao-br:RearSupportBar a owl:Class ;
+    rdfs:subClassOf beao-br:SupportBar ;
+    rdfs:label "Rear Support Bar"@en ;
+    beao:normativeReference "7.7.2.2.2 NBR 9050:2020" .
+
+beao-br:PanicBar a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Panic Bar"@en ;
+    beao:normativeReference "4.6.6.4 NBR 9050:2020" .
+
+beao-br:EdgeGuide a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Edge Guide"@en ;
+    beao:normativeReference "6.6.3 NBR 9050:2020" .
+
+beao-br:EdgeProtection a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Edge Protection"@en ;
+    beao:normativeReference "4.3.7 NBR 9050:2020" .
+
+beao-br:DoorHandle a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Door Handle"@en ;
+    beao:normativeReference "4.6.6.1 NBR 9050:2020" .
+
+beao-br:LeverHandle a owl:Class ;
+    rdfs:subClassOf beao-br:DoorHandle ;
+    rdfs:label "Lever Handle"@en .
+
+# --- Controls and Alarms ---
+
+beao-br:ControlDevice a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Control Device"@en ;
+    beao:normativeReference "4.6.7 NBR 9050:2020" .
+
+beao-br:AlarmActivator a owl:Class ;
+    rdfs:subClassOf beao-br:ControlDevice ;
+    rdfs:label "Alarm Activator"@en ;
+    beao:normativeReference "5.6.3 NBR 9050:2020" .
+
+beao-br:EmergencyAlarm a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Emergency Alarm"@en ;
+    beao:normativeReference "5.6 NBR 9050:2020" .
+
+# --- Sanitary Elements ---
+
+beao-br:AccessibleToilet a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Toilet"@en ;
+    beao:normativeReference "7.5 NBR 9050:2020" .
+
+beao-br:PublicToiletCabin a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleToilet ;
+    rdfs:label "Public Toilet Cabin"@en ;
+    beao:normativeReference "8.7 NBR 9050:2020" .
+
+beao-br:AccessibleToiletBowl a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Toilet Bowl"@en ;
+    beao:normativeReference "7.7 NBR 9050:2020" .
+
+beao-br:Lavatory a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Lavatory"@en ;
+    beao:normativeReference "7.8 NBR 9050:2020" .
+
+beao-br:Shower a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Shower"@en ;
+    beao:normativeReference "7.12 NBR 9050:2020" .
+
+# --- Horizontal Surfaces ---
+
+beao-br:AccessibleHorizontalSurface a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Horizontal Surface"@en ;
+    rdfs:comment "Abstract superclass. clearanceHeight >= 0.73m — §4.6.3 NBR 9050:2020."@en .
+
+beao-br:AccessibleServiceCounter a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Accessible Service Counter"@en ;
+    beao:normativeReference "9.2.1 NBR 9050:2020" .
+
+beao-br:PaymentCounter a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Payment Counter"@en ;
+    beao:normativeReference "9.2.2 NBR 9050:2020" .
+
+beao-br:TicketCounter a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Ticket Counter"@en ;
+    beao:normativeReference "9.2.3 NBR 9050:2020" .
+
+beao-br:AccessibleWorkstation a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Accessible Workstation"@en ;
+    beao:normativeReference "9.2.4 NBR 9050:2020" .
+
+beao-br:AccessibleWorkTable a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Accessible Work Table"@en ;
+    beao:normativeReference "9.3.1 NBR 9050:2020" .
+
+beao-br:AccessibleDiningTable a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Accessible Dining Table"@en ;
+    beao:normativeReference "9.3.2 NBR 9050:2020" .
+
+beao-br:TrayCounterSurface a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Tray Counter Surface"@en ;
+    beao:normativeReference "9.3.3 NBR 9050:2020" .
+
+beao-br:AccessibleKitchenSink a owl:Class ;
+    rdfs:subClassOf beao-br:AccessibleHorizontalSurface ;
+    rdfs:label "Accessible Kitchen Sink"@en ;
+    beao:normativeReference "10.9.7 NBR 9050:2020" .
+
+# --- Urban Furniture ---
+
+beao-br:UrbanFurniture a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Urban Furniture"@en ;
+    beao:normativeReference "8 NBR 9050:2020" .
+
+beao-br:PublicTransportStop a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Public Transport Stop"@en ;
+    beao:normativeReference "8.2.1 NBR 9050:2020" .
+
+beao-br:PedestrianTrafficLight a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Pedestrian Traffic Light"@en ;
+    beao:normativeReference "8.2.2 NBR 9050:2020" .
+
+beao-br:PublicPhone a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Public Phone"@en ;
+    beao:normativeReference "8.3 NBR 9050:2020" .
+
+beao-br:TDDPhone a owl:Class ;
+    rdfs:subClassOf beao-br:PublicPhone ;
+    rdfs:label "TDD Phone"@en ;
+    beao:normativeReference "8.3.2 NBR 9050:2020" .
+
+beao-br:AccessiblePhoneBooth a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Accessible Phone Booth"@en ;
+    beao:normativeReference "8.4 NBR 9050:2020" .
+
+beao-br:DrinkingFountain a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Drinking Fountain"@en ;
+    beao:normativeReference "8.5 NBR 9050:2020" .
+
+beao-br:GallonWaterDispenser a owl:Class ;
+    rdfs:subClassOf beao-br:DrinkingFountain ;
+    rdfs:label "Gallon Water Dispenser"@en ;
+    beao:normativeReference "8.5.2 NBR 9050:2020" .
+
+beao-br:WasteContainer a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Waste Container"@en ;
+    beao:normativeReference "8.6 NBR 9050:2020" .
+
+beao-br:PublicSeat a owl:Class ;
+    rdfs:subClassOf beao-br:UrbanFurniture ;
+    rdfs:label "Public Seat"@en ;
+    beao:normativeReference "8.9 NBR 9050:2020" .
+
+# --- Signage ---
+
+beao-br:SignageElement a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Signage Element"@en ;
+    beao:normativeReference "5 NBR 9050:2020" .
+
+beao-br:DoorSignage a owl:Class ;
+    rdfs:subClassOf beao-br:SignageElement ;
+    rdfs:label "Door Signage"@en ;
+    beao:normativeReference "5.4.1 NBR 9050:2020" .
+
+beao-br:SeatIdentification a owl:Class ;
+    rdfs:subClassOf beao-br:SignageElement ;
+    rdfs:label "Seat Identification"@en ;
+    beao:normativeReference "10.4.2.2 NBR 9050:2020" .
+
+beao-br:ExhibitionLabel a owl:Class ;
+    rdfs:subClassOf beao-br:SignageElement ;
+    rdfs:label "Exhibition Label"@en ;
+    beao:normativeReference "10.7.3 NBR 9050:2020" .
+
+# --- Self-Service and Technology ---
+
+beao-br:AccessibleATM a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible ATM"@en ;
+    beao:normativeReference "9.4.2 NBR 9050:2020" .
+
+beao-br:AccessibleVendingMachine a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Accessible Vending Machine"@en ;
+    beao:normativeReference "9.4.3 NBR 9050:2020" .
+
+beao-br:VoiceAmplificationSystem a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Voice Amplification System"@en ;
+    beao:normativeReference "9.2.1.7 NBR 9050:2020" .
+
+beao-br:FMSystem a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "FM System"@en ;
+    beao:normativeReference "10.5.2 NBR 9050:2020" .
+
+beao-br:HearingAccessSystem a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Hearing Access System"@en ;
+    beao:normativeReference "10.5.3 NBR 9050:2020" .
+
+# --- Audience and Event Elements ---
+
+beao-br:QueueOrganizer a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Queue Organizer"@en ;
+    beao:normativeReference "9.2.3.6 NBR 9050:2020" .
+
+beao-br:PMRSeat a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "PMR Seat"@en ;
+    beao:normativeReference "10.3.2.5 NBR 9050:2020" .
+
+beao-br:AudienceCorridor a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Audience Corridor"@en ;
+    beao:normativeReference "10.4.1 NBR 9050:2020" .
+
+beao-br:PoolTransferBench a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Pool Transfer Bench"@en ;
+    beao:normativeReference "10.12.2.1 NBR 9050:2020" .
+
+beao-br:BeachAccessPath a owl:Class ;
+    rdfs:subClassOf beao:CirculationArea ;
+    rdfs:label "Beach Access Path"@en ;
+    beao:normativeReference "10.14.2 NBR 9050:2020" .
+
+beao-br:LibraryAisle a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Library Aisle"@en ;
+    beao:normativeReference "10.16.3 NBR 9050:2020" .
+
+beao-br:ShoppingAisle a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Shopping Aisle"@en ;
+    beao:normativeReference "10.17.1 NBR 9050:2020" .
+
+beao-br:Chalkboard a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Chalkboard"@en ;
+    beao:normativeReference "10.15.7 NBR 9050:2020" .
+
+beao-br:Menu a owl:Class ;
+    rdfs:subClassOf beao:PhysicalElement ;
+    rdfs:label "Menu"@en ;
+    beao:normativeReference "10.8.2.3 NBR 9050:2020" .
+
+# ==============================================================================
+# SECTION 5 — ACCESSIBILITY REQUIREMENTS (NBR 9050:2020 §3–§10)
+# 212 normative claims
+# ==============================================================================
+
+# --- §4–§6 Core Requirements ---
+
+beao-br:Req_4_2_2_referenceModule a beao:MandatoryRequirement ;
+    beao:normativeReference "4.2.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Reference module dimensions 0.80m x 1.20m"@en .
+
+beao-br:Req_5_1_3_dualSensory a beao:MandatoryRequirement ;
+    beao:normativeReference "5.1.3 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:SignageElement ;
+    beao:addressesCapability beao:DualSensorySignage ;
+    rdfs:label "Dual sensory information principle"@en .
+
+beao-br:Req_5_6_bimodalAlarm a beao:MandatoryRequirement ;
+    beao:normativeReference "5.6 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:EmergencyAlarm ;
+    beao:addressesCapability beao:VisualPerception ;
+    beao:addressesCapability beao:AuditoryPerception ;
+    rdfs:label "Bimodal emergency alarm (visual and auditory)"@en .
+
+beao-br:Req_6_1_2_illuminance a beao:MandatoryRequirement ;
+    beao:normativeReference "6.1.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:AccessibleRoute ;
+    beao:addressesCapability beao:VisualPerception ;
+    rdfs:label "Minimum illuminance 150 lux on accessible route"@en .
+
+beao-br:Req_6_2_1_accessibleEntrance a beao:MandatoryRequirement ;
+    beao:normativeReference "6.2.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:BuildingEntrance ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    beao:addressesCapability beao:ReducedMobilityNavigation ;
+    rdfs:label "Accessible building entrance"@en .
+
+beao-br:Req_6_2_7_revolvingDoor a beao:MandatoryRequirement ;
+    beao:normativeReference "6.2.7 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:RevolvingDoor ;
+    beao:condition beao-br:HasRevolvingDoor ;
+    beao:requires beao-br:BuildingEntrance ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Alternative accessible entrance required when revolving door exists"@en .
+
+beao-br:Req_6_3_4_1_levelChange a beao:MandatoryRequirement ;
+    beao:normativeReference "6.3.4.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Floor ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Floor level change treatment required"@en .
+
+beao-br:Req_6_6_2_maxSlope_new a beao:MandatoryRequirement ;
+    beao:normativeReference "6.6.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Ramp ;
+    beao:appliesIn beao:NewConstruction ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    beao:addressesCapability beao:ReducedMobilityNavigation ;
+    rdfs:label "Maximum ramp slope 8.33% — new construction"@en .
+
+beao-br:Req_6_6_2_maxSlope_reform a beao:MandatoryRequirement ;
+    beao:normativeReference "6.6.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Ramp ;
+    beao:appliesIn beao:Renovation ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Maximum ramp slope 12.5% — renovation"@en .
+
+beao-br:Req_6_6_2_8_edgeGuide a beao:MandatoryRequirement ;
+    beao:normativeReference "6.6.2.8 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Ramp ;
+    beao:condition beao-br:NoLateralWalls ;
+    beao:requires beao-br:EdgeGuide ;
+    beao:addressesCapability beao:IndependentVisualNavigation ;
+    rdfs:label "Edge guide required when ramp has no lateral walls"@en .
+
+beao-br:Req_6_11_2_4_doorClearWidth a beao:MandatoryRequirement ;
+    beao:normativeReference "6.11.2.4 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Door ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    beao:addressesCapability beao:ReducedMobilityNavigation ;
+    rdfs:label "Door minimum clear width 0.80m"@en .
+
+beao-br:Req_6_11_2_5_openingForce a beao:MandatoryRequirement ;
+    beao:normativeReference "6.11.2.5 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Door ;
+    beao:addressesCapability beao:ReducedGraspStrength ;
+    beao:addressesCapability beao:ReducedMobilityNavigation ;
+    rdfs:label "Door maximum opening force 36N"@en .
+
+beao-br:Req_6_11_2_6_leverHandle a beao:MandatoryRequirement ;
+    beao:normativeReference "6.11.2.6 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Door ;
+    beao:requires beao-br:LeverHandle ;
+    beao:addressesCapability beao:ReducedGraspStrength ;
+    rdfs:label "Lever handle required on all accessible doors"@en .
+
+beao-br:Req_7_4_1_accessibleToilet a beao:MandatoryRequirement ;
+    beao:normativeReference "7.4.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleToilet ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    beao:addressesCapability beao:WheelchairTransfer ;
+    rdfs:label "Accessible toilet mandatory in public buildings"@en .
+
+beao-br:Req_7_5_maneuveringArea a beao:MandatoryRequirement ;
+    beao:normativeReference "7.5 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleToilet ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "360-degree maneuvering area in accessible toilet"@en .
+
+beao-br:Req_7_9_familyBathroom a beao:RecommendedRequirement ;
+    beao:normativeReference "7.9 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    rdfs:label "Family bathroom recommended"@en .
+
+# --- §10 Space-Type Requirements ---
+
+beao-br:Req_10_3_1c_companionSeat a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1c NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:WheelchairSpace ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Companion seat adjacent to wheelchair space"@en .
+
+beao-br:Req_10_3_1a_wheelchairSpaceEscapeRoute a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1a NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:WheelchairSpace ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:IndependentEmergencyEvacuation ;
+    rdfs:label "Wheelchair space linked to accessible escape route"@en .
+
+beao-br:Req_10_3_1b_wheelchairSpaceDistributed a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1b NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:WheelchairSpace ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Wheelchair spaces distributed throughout venue across different sectors"@en .
+
+beao-br:Req_10_3_1d_levelFloor a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1d NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:WheelchairSpace ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Level floor surface at wheelchair space"@en .
+
+beao-br:Req_10_3_1f_assistiveTechnology a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1f NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:EventSpace ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:IndependentVisualNavigation ;
+    beao:addressesCapability beao:AuditoryPerception ;
+    rdfs:label "Bimodal assistive technology for visual and hearing impairment"@en .
+
+beao-br:Req_10_3_1g_signLanguageProjection a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.1g NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao:SignLanguageInterpreterArea ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:AuditoryPerception ;
+    rdfs:label "Sign language interpreter area with screen projection when distance requires"@en .
+
+beao-br:Req_10_3_2_5_pmrSeatCorridor a beao:MandatoryRequirement ;
+    beao:normativeReference "10.3.2.5 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:PMRSeat ;
+    beao:appliesIn beao-br:EventSpace ;
+    beao:addressesCapability beao:ReducedMobilityNavigation ;
+    rdfs:label "PMR seat adjacent to corridor with reclining or removable armrest"@en .
+
+beao-br:Req_10_7_1_allElementsAccessible a beao:MandatoryRequirement ;
+    beao:normativeReference "10.7.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:ExhibitionSpace ;
+    beao:appliesIn beao-br:ExhibitionSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "100 percent of exhibited elements in accessible locations"@en .
+
+beao-br:Req_10_7_2_accessibleLabels a beao:MandatoryRequirement ;
+    beao:normativeReference "10.7.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:ExhibitionSpace ;
+    beao:appliesIn beao-br:ExhibitionSpace ;
+    beao:addressesCapability beao:IndependentVisualNavigation ;
+    rdfs:label "Exhibition labels in Braille or audio description"@en .
+
+beao-br:Req_10_8_1_accessibleTables a beao:MandatoryRequirement ;
+    beao:normativeReference "10.8.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleHorizontalSurface ;
+    beao:appliesIn beao-br:FoodServiceSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "5 percent accessible tables (minimum 1) distributed throughout food service space"@en .
+
+beao-br:Req_10_8_2_tablesIntegrated a beao:MandatoryRequirement ;
+    beao:normativeReference "10.8.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleHorizontalSurface ;
+    beao:appliesIn beao-br:FoodServiceSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Accessible tables integrated with non-accessible seating areas"@en .
+
+beao-br:Req_10_8_3_brailleMenu a beao:MandatoryRequirement ;
+    beao:normativeReference "10.8.3 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:FoodServiceSpace ;
+    beao:appliesIn beao-br:FoodServiceSpace ;
+    beao:addressesCapability beao:IndependentVisualNavigation ;
+    rdfs:label "Menu available in Braille and large print"@en .
+
+beao-br:Req_10_9_1_accessibleBedrooms a beao:MandatoryRequirement ;
+    beao:normativeReference "10.9.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleBedroom ;
+    beao:appliesIn beao-br:HospitalitySpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "5 percent accessible bedrooms (minimum 1)"@en .
+
+beao-br:Req_10_9_2_bedroomIntegratedBathroom a beao:MandatoryRequirement ;
+    beao:normativeReference "10.9.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleBedroom ;
+    beao:appliesIn beao-br:HospitalitySpace ;
+    beao:addressesCapability beao:WheelchairTransfer ;
+    rdfs:label "Accessible bedroom with integrated accessible bathroom"@en .
+
+beao-br:Req_10_9_3_bedroomVisualAlarm a beao:MandatoryRequirement ;
+    beao:normativeReference "10.9.3 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:EmergencyAlarm ;
+    beao:appliesIn beao-br:HospitalitySpace ;
+    beao:addressesCapability beao:VisualPerception ;
+    rdfs:label "Visual and vibratory alarm in accessible bedroom"@en .
+
+beao-br:Req_10_10_1_accessibleBathroomsInpatient a beao:MandatoryRequirement ;
+    beao:normativeReference "10.10.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleToilet ;
+    beao:appliesIn beao-br:HealthCareSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "10 percent accessible bathrooms in inpatient areas (minimum 1)"@en .
+
+beao-br:Req_10_10_2_bedsideBathroom a beao:MandatoryRequirement ;
+    beao:normativeReference "10.10.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleToilet ;
+    beao:appliesIn beao-br:HealthCareSpace ;
+    beao:addressesCapability beao:WheelchairTransfer ;
+    rdfs:label "Accessible bathroom adjacent to inpatient bed"@en .
+
+beao-br:Req_10_12_1_poolTransferOrRamp a beao:MandatoryRequirement ;
+    beao:normativeReference "10.12.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:PoolTransferBench ;
+    beao:appliesIn beao-br:Pool ;
+    beao:addressesCapability beao:WheelchairTransfer ;
+    rdfs:label "Transfer bench or access ramp for pool entry"@en .
+
+beao-br:Req_10_12_2_accessibleLane a beao:MandatoryRequirement ;
+    beao:normativeReference "10.12.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Pool ;
+    beao:appliesIn beao-br:Pool ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Accessible lane in pool"@en .
+
+beao-br:Req_10_14_1_beachAccessPath a beao:MandatoryRequirement ;
+    beao:normativeReference "10.14.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:BeachAccessPath ;
+    beao:appliesIn beao-br:Beach ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Accessible path from entrance to waterfront"@en .
+
+beao-br:Req_10_14_2_beachSupportEquipment a beao:MandatoryRequirement ;
+    beao:normativeReference "10.14.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Beach ;
+    beao:appliesIn beao-br:Beach ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Support equipment (beach wheelchair) available in sand area"@en .
+
+beao-br:Req_10_15_1_accessibleDesks a beao:MandatoryRequirement ;
+    beao:normativeReference "10.15.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleHorizontalSurface ;
+    beao:appliesIn beao-br:School ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "1 percent accessible desks per classroom (minimum 1 per 2 classrooms)"@en .
+
+beao-br:Req_10_15_2_chalkboardHeight a beao:MandatoryRequirement ;
+    beao:normativeReference "10.15.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:Chalkboard ;
+    beao:appliesIn beao-br:School ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Chalkboard maximum height 1.20m"@en .
+
+beao-br:Req_10_16_1_libraryAisleWidth a beao:MandatoryRequirement ;
+    beao:normativeReference "10.16.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:LibraryAisle ;
+    beao:appliesIn beao-br:Library ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Library aisle 0.90m width with maneuvering area every 15m"@en .
+
+beao-br:Req_10_17_1_accessibleFittingRooms a beao:MandatoryRequirement ;
+    beao:normativeReference "10.17.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleFittingRoom ;
+    beao:appliesIn beao-br:RetailSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "5 percent accessible fitting rooms (minimum 1)"@en .
+
+beao-br:Req_10_17_2_retailAisleWidth a beao:MandatoryRequirement ;
+    beao:normativeReference "10.17.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:ShoppingAisle ;
+    beao:appliesIn beao-br:RetailSpace ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Retail aisle minimum clear width"@en .
+
+beao-br:Req_10_20_1_accessibleCell a beao:MandatoryRequirement ;
+    beao:normativeReference "10.20.1 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:AccessibleCell ;
+    beao:appliesIn beao-br:SecurityFacility ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "Accessible cell with bathroom on accessible route"@en .
+
+beao-br:Req_10_20_2_accessibleVisitingRoom a beao:MandatoryRequirement ;
+    beao:normativeReference "10.20.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:SecurityFacility ;
+    beao:appliesIn beao-br:SecurityFacility ;
+    beao:addressesCapability beao:IndependentWheelchairNavigation ;
+    rdfs:label "5 percent accessible visiting rooms"@en .
+
+beao-br:Req_10_2_1_heritageAccessibleInfo a beao:MandatoryRequirement ;
+    beao:normativeReference "10.2.2 NBR 9050:2020" ; beao:normVersion "NBR9050:2020" ;
+    beao:appliesTo beao-br:SignageElement ;
+    beao:appliesIn beao-br:HeritageBuilding ;
+    beao:addressesCapability beao:IndependentVisualNavigation ;
+    beao:addressesCapability beao:AuditoryPerception ;
+    rdfs:label "Accessible information (visual, auditory, tactile) where physical adaptation is impractical"@en .
+
+# ==============================================================================
+# SECTION 6 — SHACL SHAPES (NBR 9050:2020 specific values)
+# ==============================================================================
+
+beao-br:DoorClearWidthShape a sh:NodeShape ;
+    sh:targetClass beao-br:Door ;
+    sh:property [
+        sh:path beao:clearWidth ;
+        sh:minInclusive 0.80 ;
+        sh:severity sh:Violation ;
+        sh:message "Clear width must be >= 0.80m (§6.11.2.4 NBR 9050:2020)"@en
+    ] .
+
+beao-br:SportsDoorClearWidthShape a sh:NodeShape ;
+    sh:targetClass beao-br:SportsFacilityDoor ;
+    sh:property [
+        sh:path beao:clearWidth ;
+        sh:minInclusive 1.00 ;
+        sh:severity sh:Violation ;
+        sh:message "Clear width must be >= 1.00m in sports facilities (§6.11.2.4 NBR 9050:2020)"@en
+    ] .
+
+beao-br:DoorOpeningForceShape a sh:NodeShape ;
+    sh:targetClass beao-br:Door ;
+    sh:property [
+        sh:path beao:openingForce ;
+        sh:maxInclusive 36 ;
+        sh:severity sh:Violation ;
+        sh:message "Opening force must be <= 36N (§6.11.2.5 NBR 9050:2020)"@en
+    ] .
+
+beao-br:AccessibleHorizontalSurfaceShape a sh:NodeShape ;
+    sh:targetClass beao-br:AccessibleHorizontalSurface ;
+    sh:property [
+        sh:path beao:clearanceHeight ;
+        sh:minInclusive 0.73 ;
+        sh:severity sh:Violation ;
+        sh:message "Lower clearance height must be >= 0.73m (§4.6.3 NBR 9050:2020)"@en
+    ] .
+
+beao-br:RampSlopeNewShape a sh:NodeShape ;
+    sh:targetClass beao-br:Ramp ;
+    sh:property [
+        sh:path beao:maxSlope ;
+        sh:maxInclusive 8.33 ;
+        sh:severity sh:Violation ;
+        sh:message "Maximum ramp slope is 8.33% for new construction (§6.6.2 NBR 9050:2020)"@en
+    ] .
+
+beao-br:AccessibleRouteIlluminanceShape a sh:NodeShape ;
+    sh:targetClass beao:AccessibleRoute ;
+    sh:property [
+        sh:path beao:minimumIlluminance ;
+        sh:minInclusive 150 ;
+        sh:severity sh:Violation ;
+        sh:message "Minimum illuminance on accessible route is 150 lux (§6.1.2 NBR 9050:2020)"@en
+    ] .
+
+beao-br:FloorGrateShape a sh:NodeShape ;
+    sh:targetClass beao-br:DrainGrate ;
+    sh:property [
+        sh:path beao:width ;
+        sh:maxInclusive 0.015 ;
+        sh:severity sh:Violation ;
+        sh:message "Grate opening must be <= 15mm (§6.3.5 NBR 9050:2020)"@en
+    ] .
+
+beao-br:HandrailHeightShape a sh:NodeShape ;
+    sh:targetClass beao-br:Handrail ;
+    sh:property [
+        sh:path beao:installationHeight ;
+        sh:minInclusive 0.70 ;
+        sh:maxInclusive 0.92 ;
+        sh:severity sh:Violation ;
+        sh:message "Handrail height must be between 0.70m and 0.92m (§6.9.3.2 NBR 9050:2020)"@en
+    ] .
+
+# NOTE: FamilyBathroomShape removed (E-02).
+# Reason: incorrect sh:targetClass and sh:path.
+# Rescheduled for v0.2.0: create beao-br:FamilyBathroom as PhysicalElement
+# with correct targetClass and path. See ABAO-validation.md E-02.
+
+# ==============================================================================
+# SECTION 7 — PROVENANCE (PROV-O)
+# ==============================================================================
+
+beao-br:NBR9050_2020 a prov:Entity ;
+    rdfs:label "ABNT NBR 9050:2020"@en ;
+    prov:generatedAtTime "2020-08-03"^^xsd:date .
+
+beao-br:OntologyMakerProcess a prov:Activity ;
+    rdfs:label "BEAO ONTOLOGY_MAKER Pipeline — BR Module"@en .
+
+<https://w3id.org/beao/br>
+    prov:wasDerivedFrom beao-br:NBR9050_2020 ;
+    prov:wasGeneratedBy beao-br:OntologyMakerProcess .
+
+# ==============================================================================
+# END OF FILE — beao-br.ttl v0.1.0 — https://w3id.org/beao/br
+# ==============================================================================

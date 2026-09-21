@@ -1,0 +1,473 @@
+# ==============================================================================
+# BEAO–ICF Alignment
+# Version: 0.1.1
+# URI base: https://w3id.org/beao/icf-alignment
+# Depends on: beao.ttl v0.1.0
+# Normative sources: ABNT NBR 9050:2020 + WHO ICF 2026-01
+# License: CC BY 4.0
+#
+# Semantic alignment between BEAO FunctionalCapabilities and WHO ICF codes.
+# Operationalizes ICF environmental factor qualification through measurable
+# normative requirements derived from national modules (beao-br: NBR 9050:2020).
+#
+# Decision CD-08: All FunctionalCapability → ICF mappings live here,
+# not in beao core. Rationale: core stability — adding an ICF code
+# discovered in a new national module must not force a core version bump.
+#
+# Changelog v0.1.1:
+#   - Removed icf:d455 from ReducedMobilityNavigation
+#     Reason: WHO ICF 2026-01 definition — "moving in ways other than walking"
+#     (crawling, climbing, swimming) — incompatible with P.M.R. with walker/crutch.
+#     d450 (walking) already covers the correct context and remains mapped.
+#     Verified against WHO ICF 2026-01, September 2026.
+#   - Renamed abao: → beao: throughout
+#   - All labels and comments translated to English (primary language)
+#   - ICF prefix corrected to http://hl7.org/fhir/sid/icf/
+#   - Concrete mappings migrated from core per CD-08
+#
+# Decisions applied:
+#   CI-01 — alignment entry point: FunctionalCapability, not PhysicalElement
+#   CI-02 — granularity: block (e.g. e150), not chapter nor leaf code
+#   CI-03 — e = primary (removesBarrierTo); d = context (relatedToActivity)
+#   CI-06 — properties: beao:removesBarrierTo and beao:relatedToActivity
+#   CI-07 — inclusion requires: (1) built environment can improve/worsen the factor +
+#            (2) at least one national module normative standard addresses the code
+# ==============================================================================
+
+@prefix beao:    <https://w3id.org/beao#> .
+@prefix icf:     <http://hl7.org/fhir/sid/icf/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+# ==============================================================================
+# ONTOLOGY METADATA
+# ==============================================================================
+
+<https://w3id.org/beao/icf-alignment>
+    a owl:Ontology ;
+    rdfs:label "BEAO–ICF Alignment"@en ;
+    owl:versionInfo "0.1.1" ;
+    owl:priorVersion "0.1.0" ;
+    owl:imports <https://w3id.org/beao> ;
+    dcterms:description "Semantic alignment between BEAO FunctionalCapabilities and WHO ICF codes. Operationalizes ICF environmental factor qualification through measurable normative requirements derived from NBR 9050:2020 (beao-br)."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:creator "Eduardo Dati Dias" ;
+    dcterms:creator "Jean Orlando" ;
+    dcterms:creator "Carlos Bandeira de Mello Monteiro" ;
+    dcterms:source "WHO ICF 2026-01" ;
+    dcterms:source "ABNT NBR 9050:2020" ;
+    rdfs:seeAlso <http://hl7.org/fhir/sid/icf> ;
+    rdfs:seeAlso <https://hl7.org/fhir/6.0.0-snapshot1/references.html> ;
+    prov:wasDerivedFrom <https://www.who.int/classifications/international-classification-of-functioning-disability-and-health> ;
+    prov:wasDerivedFrom <https://www.abnt.org.br/normalizacao/lista-de-publicacoes/abnt?ID=1311> .
+
+# ==============================================================================
+# SECTION 1 — ICF FHIR CODING SYSTEM
+# ==============================================================================
+
+<http://hl7.org/fhir/sid/icf>
+    a owl:NamedIndividual ;
+    rdfs:label "ICF — HL7 FHIR CodeSystem"@en .
+
+# ==============================================================================
+# SECTION 2 — PROPERTY CHAIN DOCUMENTATION
+#
+# Chains defined in beao core (beao.ttl Section 9):
+#   beao:assessmentImpactsProfile
+#   beao:assessmentRemovesBarrierTo
+#   beao:assessmentRelatedToActivity
+#
+# Full inference chain:
+#   ConformityAssessment
+#     → (beao:appliedRequirement) → AccessibilityRequirement
+#     → (beao:addressesCapability) → FunctionalCapability
+#     → (beao:removesBarrierTo / beao:relatedToActivity) → icf:eXXX / icf:dXXX
+#
+# ICF qualification result:
+#   ConformityAssessment [earl:passed]  → environment as facilitator (e+)
+#   ConformityAssessment [earl:failed]  → environment as barrier (e.)
+#
+# Theoretical contribution: operationalizes ICF environmental factor
+# qualification via measurable normative requirements. Not identified in
+# previously published accessibility ontologies.
+#
+# Note: SWRL rules for conditional inference (passed/failed → ICF qualifier)
+# were evaluated and rejected — they exit OWL 2 DL profile.
+# Implementation as SPARQL CONSTRUCT is registered as future work.
+# ==============================================================================
+
+# ==============================================================================
+# SECTION 3 — ICF NAMED INDIVIDUALS
+# Only codes actually referenced in the mappings below are declared.
+# Unused codes are not pre-declared (per CI-07 — inclusion requires
+# a national module normative standard addressing the code).
+# ==============================================================================
+
+# --- Environmental factors (e codes) ---
+icf:e115 a owl:NamedIndividual ; rdfs:label "e115 — Products for personal use in daily living"@en .
+icf:e120 a owl:NamedIndividual ; rdfs:label "e120 — Products for personal indoor and outdoor mobility"@en .
+icf:e125 a owl:NamedIndividual ; rdfs:label "e125 — Products for communication"@en .
+icf:e140 a owl:NamedIndividual ; rdfs:label "e140 — Products for culture, recreation and sport"@en .
+icf:e150 a owl:NamedIndividual ; rdfs:label "e150 — Design, construction and building products and technology for public use"@en .
+icf:e155 a owl:NamedIndividual ; rdfs:label "e155 — Design, construction and building products and technology for private use"@en .
+icf:e240 a owl:NamedIndividual ; rdfs:label "e240 — Light"@en .
+icf:e250 a owl:NamedIndividual ; rdfs:label "e250 — Sound"@en .
+icf:e255 a owl:NamedIndividual ; rdfs:label "e255 — Vibration"@en .
+icf:e515 a owl:NamedIndividual ; rdfs:label "e515 — Architecture and construction services, systems and policies"@en .
+icf:e520 a owl:NamedIndividual ; rdfs:label "e520 — Open space planning services, systems and policies"@en .
+icf:e525 a owl:NamedIndividual ; rdfs:label "e525 — Housing services, systems and policies"@en .
+icf:e535 a owl:NamedIndividual ; rdfs:label "e535 — Communication services, systems and policies"@en .
+icf:e545 a owl:NamedIndividual ; rdfs:label "e545 — Civil protection services, systems and policies"@en .
+
+# --- Activities and participation (d codes) ---
+icf:d110 a owl:NamedIndividual ; rdfs:label "d110 — Watching"@en .
+icf:d115 a owl:NamedIndividual ; rdfs:label "d115 — Listening"@en .
+icf:d120 a owl:NamedIndividual ; rdfs:label "d120 — Other purposeful sensing"@en .
+icf:d310 a owl:NamedIndividual ; rdfs:label "d310 — Communicating with — receiving — spoken messages"@en .
+icf:d315 a owl:NamedIndividual ; rdfs:label "d315 — Communicating with — receiving — nonverbal messages"@en .
+icf:d320 a owl:NamedIndividual ; rdfs:label "d320 — Communicating with — receiving — formal sign language messages"@en .
+icf:d410 a owl:NamedIndividual ; rdfs:label "d410 — Changing basic body position"@en .
+icf:d415 a owl:NamedIndividual ; rdfs:label "d415 — Maintaining a body position"@en .
+icf:d420 a owl:NamedIndividual ; rdfs:label "d420 — Transferring oneself"@en .
+icf:d430 a owl:NamedIndividual ; rdfs:label "d430 — Lifting and carrying objects"@en .
+icf:d440 a owl:NamedIndividual ; rdfs:label "d440 — Fine hand use"@en .
+icf:d445 a owl:NamedIndividual ; rdfs:label "d445 — Hand and arm use"@en .
+icf:d450 a owl:NamedIndividual ; rdfs:label "d450 — Walking"@en .
+icf:d460 a owl:NamedIndividual ; rdfs:label "d460 — Moving around in different locations"@en .
+icf:d465 a owl:NamedIndividual ; rdfs:label "d465 — Moving around using equipment"@en .
+icf:d510 a owl:NamedIndividual ; rdfs:label "d510 — Washing oneself"@en .
+icf:d520 a owl:NamedIndividual ; rdfs:label "d520 — Caring for body parts"@en .
+icf:d530 a owl:NamedIndividual ; rdfs:label "d530 — Toileting"@en .
+icf:d620 a owl:NamedIndividual ; rdfs:label "d620 — Acquisition of goods and services"@en .
+icf:d910 a owl:NamedIndividual ; rdfs:label "d910 — Community life"@en .
+
+# ==============================================================================
+# SECTION 4 — MAPPINGS (12 FunctionalCapabilities → ICF codes)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 01 — IndependentWheelchairNavigation
+# Normative reference: NBR 9050:2020 §4.2.2, §6
+# ------------------------------------------------------------------------------
+
+beao:IndependentWheelchairNavigation
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products (wheelchair)
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d465 ;  # moving around using equipment (wheelchair)
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §4.2.2, §6" .
+
+# ------------------------------------------------------------------------------
+# 02 — WheelchairTransfer
+# Normative reference: NBR 9050:2020 §7, §10
+# ------------------------------------------------------------------------------
+
+beao:WheelchairTransfer
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products
+    beao:removesBarrierTo icf:e140 ;   # products for culture, recreation and sport
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:relatedToActivity icf:d410 ;  # changing basic body position
+    beao:relatedToActivity icf:d420 ;  # transferring oneself
+    beao:relatedToActivity icf:d510 ;  # washing oneself
+    beao:relatedToActivity icf:d530 ;  # toileting
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §7, §10" .
+
+# ------------------------------------------------------------------------------
+# 03 — IndependentWheelchairApproach
+# Normative reference: NBR 9050:2020 §4.2.2, §9
+# ------------------------------------------------------------------------------
+
+beao:IndependentWheelchairApproach
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:relatedToActivity icf:d430 ;  # lifting and carrying objects
+    beao:relatedToActivity icf:d440 ;  # fine hand use
+    beao:relatedToActivity icf:d445 ;  # hand and arm use
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §4.2.2, §9" .
+
+# ------------------------------------------------------------------------------
+# 04 — ReducedGraspStrength
+# Normative reference: NBR 9050:2020 §6.11, §7, §9
+# ------------------------------------------------------------------------------
+
+beao:ReducedGraspStrength
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:relatedToActivity icf:d430 ;  # lifting and carrying objects
+    beao:relatedToActivity icf:d440 ;  # fine hand use
+    beao:relatedToActivity icf:d445 ;  # hand and arm use
+    beao:relatedToActivity icf:d510 ;  # washing oneself
+    beao:relatedToActivity icf:d520 ;  # caring for body parts
+    beao:relatedToActivity icf:d530 ;  # toileting
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §6.11, §7, §9" .
+
+# ------------------------------------------------------------------------------
+# 05 — IndependentVisualNavigation
+# Normative reference: NBR 9050:2020 §5, §6, §6.1.2
+# ------------------------------------------------------------------------------
+
+beao:IndependentVisualNavigation
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products (white cane)
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e240 ;   # light — minimum illuminance on routes
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    beao:relatedToActivity icf:d110 ;  # watching
+    beao:relatedToActivity icf:d115 ;  # listening
+    beao:relatedToActivity icf:d120 ;  # other purposeful sensing (touch/tactile floor)
+    beao:relatedToActivity icf:d445 ;  # hand and arm use (white cane)
+    beao:relatedToActivity icf:d450 ;  # walking
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d465 ;  # moving around using equipment
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §5, §6, §6.1.2" .
+
+# ------------------------------------------------------------------------------
+# 06 — VisualPerception
+# Normative reference: NBR 9050:2020 §5.3, §5.4, §6.1.2, §9
+# ------------------------------------------------------------------------------
+
+beao:VisualPerception
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e240 ;   # light — illuminance and absence of glare
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    beao:relatedToActivity icf:d110 ;  # watching
+    beao:relatedToActivity icf:d310 ;  # communicating with — receiving — spoken messages
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §5.3, §5.4, §6.1.2, §9" .
+
+# ------------------------------------------------------------------------------
+# 07 — AuditoryPerception
+# Normative reference: NBR 9050:2020 §5.5, §9, §10.3, §10.5, §10.14
+# ------------------------------------------------------------------------------
+
+beao:AuditoryPerception
+    beao:removesBarrierTo icf:e125 ;   # products for communication (FM, amplifiers)
+    beao:removesBarrierTo icf:e140 ;   # products for culture, recreation and sport
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use (bedrooms)
+    beao:removesBarrierTo icf:e240 ;   # light — complementary visual signage
+    beao:removesBarrierTo icf:e250 ;   # sound — acoustics and ambient noise
+    beao:removesBarrierTo icf:e255 ;   # vibration — vibratory alarms
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e525 ;   # housing services
+    beao:relatedToActivity icf:d110 ;  # watching
+    beao:relatedToActivity icf:d115 ;  # listening
+    beao:relatedToActivity icf:d120 ;  # other purposeful sensing
+    beao:relatedToActivity icf:d310 ;  # communicating with — receiving — spoken messages
+    beao:relatedToActivity icf:d320 ;  # communicating using sign language (Libras)
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:relatedToActivity icf:d910 ;  # community life
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §5.5, §9, §10.3, §10.5, §10.14" .
+
+# ------------------------------------------------------------------------------
+# 08 — DualSensorySignage
+# Normative reference: NBR 9050:2020 §5.1.3, §5.5, §6, §9, §10.3, §10.5
+# Note: two-senses principle — information perceivable through at least
+# two sensory channels simultaneously.
+# ------------------------------------------------------------------------------
+
+beao:DualSensorySignage
+    beao:removesBarrierTo icf:e125 ;   # products for multimodal communication
+    beao:removesBarrierTo icf:e140 ;   # products for culture, recreation and sport
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e240 ;   # light — visual signage channel
+    beao:removesBarrierTo icf:e250 ;   # sound — auditory signage channel
+    beao:removesBarrierTo icf:e255 ;   # vibration — vibratory channel
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    beao:relatedToActivity icf:d110 ;  # watching — visual channel
+    beao:relatedToActivity icf:d115 ;  # listening — auditory channel
+    beao:relatedToActivity icf:d120 ;  # other purposeful sensing — tactile/Braille channel
+    beao:relatedToActivity icf:d310 ;  # communicating with — receiving — spoken messages
+    beao:relatedToActivity icf:d315 ;  # communicating with — receiving — nonverbal messages
+    beao:relatedToActivity icf:d320 ;  # communicating using sign language
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:relatedToActivity icf:d910 ;  # community life
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §5.1.3, §5.5, §6, §9, §10.3, §10.5" .
+
+# ------------------------------------------------------------------------------
+# 09 — LargeBodyAccommodation
+# Normative reference: NBR 9050:2020 §7, §9, §10, §10.3
+# ------------------------------------------------------------------------------
+
+beao:LargeBodyAccommodation
+    beao:removesBarrierTo icf:e140 ;   # products for culture, recreation and sport
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:relatedToActivity icf:d410 ;  # changing basic body position
+    beao:relatedToActivity icf:d415 ;  # maintaining a body position
+    beao:relatedToActivity icf:d450 ;  # walking
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d510 ;  # washing oneself
+    beao:relatedToActivity icf:d520 ;  # caring for body parts
+    beao:relatedToActivity icf:d530 ;  # toileting
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:relatedToActivity icf:d910 ;  # community life
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §7, §9, §10, §10.3" .
+
+# ------------------------------------------------------------------------------
+# 10 — IndependentEmergencyEvacuation
+# Normative reference: NBR 9050:2020 §5.5, §6.3
+# ------------------------------------------------------------------------------
+
+beao:IndependentEmergencyEvacuation
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products
+    beao:removesBarrierTo icf:e125 ;   # products for communication (rescue area)
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e240 ;   # light — emergency luminous signage
+    beao:removesBarrierTo icf:e250 ;   # sound — auditory alarms
+    beao:removesBarrierTo icf:e255 ;   # vibration — vibratory alarms
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e525 ;   # housing services
+    beao:removesBarrierTo icf:e535 ;   # communication services (bidirectional rescue area)
+    beao:removesBarrierTo icf:e545 ;   # civil protection services
+    beao:relatedToActivity icf:d110 ;  # watching — visual emergency signals
+    beao:relatedToActivity icf:d115 ;  # listening — auditory alarms
+    beao:relatedToActivity icf:d120 ;  # other purposeful sensing — vibratory alarms
+    beao:relatedToActivity icf:d310 ;  # communicating — bidirectional rescue area
+    beao:relatedToActivity icf:d415 ;  # maintaining a body position — awaiting rescue
+    beao:relatedToActivity icf:d450 ;  # walking — escape route
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d465 ;  # moving around using equipment (wheelchair)
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §5.5, §6.3" .
+
+# ------------------------------------------------------------------------------
+# 11 — SafeIndependentUse
+# Normative reference: NBR 9050:2020 §4, §6, §6.1.2, §7, §9
+# Note: most transversal capability — spans all physical elements
+# ------------------------------------------------------------------------------
+
+beao:SafeIndependentUse
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e240 ;   # light — illuminance and safety
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    beao:removesBarrierTo icf:e525 ;   # housing services
+    beao:relatedToActivity icf:d110 ;  # watching — perceiving obstacles and risks
+    beao:relatedToActivity icf:d120 ;  # other purposeful sensing — tactile risk perception
+    beao:relatedToActivity icf:d410 ;  # changing basic body position
+    beao:relatedToActivity icf:d415 ;  # maintaining a body position
+    beao:relatedToActivity icf:d420 ;  # transferring oneself
+    beao:relatedToActivity icf:d445 ;  # hand and arm use (handrails)
+    beao:relatedToActivity icf:d450 ;  # walking — safe displacement
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d465 ;  # moving around using equipment
+    beao:relatedToActivity icf:d510 ;  # washing oneself — safe bathroom use
+    beao:relatedToActivity icf:d520 ;  # caring for body parts
+    beao:relatedToActivity icf:d530 ;  # toileting
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    beao:relatedToActivity icf:d910 ;  # community life
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §4, §6, §6.1.2, §7, §9" .
+
+# ------------------------------------------------------------------------------
+# 12 — ReducedMobilityNavigation
+# Normative reference: NBR 9050:2020 §6.2.1, §6.6.2, §6.11.2.4, §6.11.2.5
+#
+# Modeling decision (CD-05):
+#   P.M.R. is a distinct normative category in NBR 9050, but its physical
+#   requirements always co-occur with IndependentWheelchairNavigation or
+#   ReducedGraspStrength — never appears isolated in the data.
+#   ICF alignment is declared as a subset of those two capabilities,
+#   with explicit semantic distinction: d450/d460 (walking/moving on foot)
+#   are the primary contexts — not d465 (using equipment/wheelchair),
+#   which is specific to P.C.R.
+#   P.M.R. represents a less severe functional restriction than P.C.R.,
+#   but the physical requirements of the environment are identical or
+#   more permissive.
+#
+# d455 EXCLUDED (v0.1.1): WHO ICF 2026-01 definition — "moving in ways
+# other than walking" (crawling, climbing, swimming) — incompatible with
+# P.M.R. using walker/crutch. d450 covers the correct context.
+# ------------------------------------------------------------------------------
+
+beao:ReducedMobilityNavigation
+    beao:removesBarrierTo icf:e120 ;   # personal mobility products (walker, crutch)
+    beao:removesBarrierTo icf:e150 ;   # architecture for public use
+    beao:removesBarrierTo icf:e155 ;   # architecture for private use
+    beao:removesBarrierTo icf:e515 ;   # architecture and construction services
+    beao:removesBarrierTo icf:e520 ;   # open space planning services
+    # Distinction from P.C.R.: d450/d460 primary; d465 absent (no wheelchair)
+    beao:relatedToActivity icf:d450 ;  # walking — displacement on foot with reduced mobility
+    beao:relatedToActivity icf:d460 ;  # moving around in different locations
+    beao:relatedToActivity icf:d445 ;  # hand and arm use (crutch, walker)
+    beao:relatedToActivity icf:d440 ;  # fine hand use — operation of elements
+    beao:relatedToActivity icf:d620 ;  # acquisition of goods and services
+    skos:broader beao:IndependentWheelchairNavigation ;
+    skos:note "P.M.R. (Reduced Mobility Person) — normative category NBR 9050 §3.1. Physical requirements co-occur with IndependentWheelchairNavigation and ReducedGraspStrength. Semantic distinction: absence of d465 (propulsion equipment); d450 (walking) as primary context. d455 excluded in v0.1.1 — WHO ICF 2026-01 definition incompatible with P.M.R."@en ;
+    beao:icfSystem <http://hl7.org/fhir/sid/icf> ;
+    beao:normativeReference "NBR 9050:2020 §6.2.1, §6.6.2, §6.11.2.4, §6.11.2.5" .
+
+# ==============================================================================
+# SECTION 5 — THEORETICAL CONTRIBUTION (annotation)
+#
+# A ConformityAssessment with result earl:passed means the environment
+# acts as a FACILITATOR in ICF terminology — e+ (positive qualifier).
+# A ConformityAssessment with result earl:failed means the environment
+# acts as a BARRIER — e. (negative qualifier, official WHO notation).
+#
+# Full inference chain:
+#   PhysicalElement
+#     ← (beao:appliesTo ← AccessibilityRequirement)
+#     → (beao:addressesCapability →) FunctionalCapability
+#     → (beao:removesBarrierTo →) icf:eXXX
+#
+#   ConformityAssessment [earl:passed]  → environment as facilitator (e+)
+#   ConformityAssessment [earl:failed]  → environment as barrier (e.)
+#
+# This operationalization of ICF environmental factor qualification via
+# measurable normative requirements has not been identified in previously
+# published accessibility ontologies.
+# ==============================================================================
+
+# ==============================================================================
+# SECTION 6 — PROVENANCE
+# ==============================================================================
+
+beao:ICFAlignmentProcess a prov:Activity ;
+    rdfs:label "BEAO–ICF Alignment — ONTOLOGY_MAKER Integration Agent"@en ;
+    prov:startedAtTime "2026-09-01"^^xsd:date ;
+    prov:endedAtTime "2026-09-20"^^xsd:date .
+
+<https://w3id.org/beao/icf-alignment>
+    prov:wasGeneratedBy beao:ICFAlignmentProcess .
+
+# ==============================================================================
+# END OF FILE — beao-icf-alignment.ttl v0.1.1
+# https://w3id.org/beao/icf-alignment
+# CD-08: mappings here, property signatures in beao.ttl core
+# ==============================================================================

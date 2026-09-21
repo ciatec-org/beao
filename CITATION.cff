@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use this ontology, please cite it as below."
+title: "BEAO — Built Environment Accessibility Ontology"
+abstract: "A core OWL 2 DL ontology for machine-interpretable accessibility compliance in the built environment. Jurisdiction-agnostic, extensible via national modules. The Brazil module (beao-br) formalizes ABNT NBR 9050:2020. Includes semantic alignment with WHO ICF 2026-01."
+version: 0.1.0
+date-released: 2026-09-20
+license: CC-BY-4.0
+repository-code: https://github.com/ciatec-org/beao
+url: https://w3id.org/beao
+keywords:
+  - accessibility
+  - built environment
+  - ontology
+  - OWL
+  - semantic web
+  - NBR 9050
+  - ICF
+  - ABNT
+  - linked data
+  - universal design
+
+authors:
+  - family-names: Dati Dias
+    given-names: Eduardo
+    orcid: https://orcid.org/0000-0002-6649-3237
+    affiliation: "CIATec USP Centre for Inclusion and Accessibility through Technology, University of São Paulo; Arcade Metrics"
+
+  - family-names: Orlando
+    given-names: Jean
+    affiliation: WEMOGA
+
+  - family-names: Bandeira de Mello Monteiro
+    given-names: Carlos
+    orcid: https://orcid.org/0000-0002-2661-775X
+    affiliation: "CIATec USP Centre for Inclusion and Accessibility through Technology, University of São Paulo"
+
+preferred-citation:
+  type: software
+  title: "BEAO — Built Environment Accessibility Ontology"
+  version: 0.1.0
+  date-released: 2026-09-20
+  license: CC-BY-4.0
+  repository-code: https://github.com/ciatec-org/beao
+  url: https://w3id.org/beao
+  authors:
+    - family-names: Dati Dias
+      given-names: Eduardo
+      orcid: https://orcid.org/0000-0002-6649-3237
+      affiliation: "CIATec USP Centre for Inclusion and Accessibility through Technology, University of São Paulo; Arcade Metrics"
+
+    - family-names: Orlando
+      given-names: Jean
+      affiliation: WEMOGA
+
+    - family-names: Bandeira de Mello Monteiro
+      given-names: Carlos
+      orcid: https://orcid.org/0000-0002-2661-775X
+      affiliation: "CIATec USP Centre for Inclusion and Accessibility through Technology, University of São Paulo"
