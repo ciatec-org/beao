@@ -41,11 +41,12 @@ Please use the citation information provided in [`CITATION.cff`](CITATION.cff).
 
 ## Maintainers
 
-CIATEC EACH-USP - Centre for Inclusion and Accessibility through Technology, School of Arts, Sciences and Humanities, University of São Paulo
+- ARCADE METRICS - Advanced Analytics Team ([@eduardo-arcade-metrics](https://github.com/eduardo-arcade-metrics))
 
-WEMOGA - Research & Development
+## Contributors
 
-ARCADE METRICS - Advanced Analytics Team
+- CIATEC EACH-USP - Centre for Inclusion and Accessibility through Technology, School of Arts, Sciences and Humanities, University of São Paulo
+- WEMOGA - Research & Development
 
 ## License
 
