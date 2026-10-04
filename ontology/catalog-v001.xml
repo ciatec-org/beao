@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri id="User Entered Import Resolution" name="https://w3id.org/beao" uri="beao.ttl"/>
-    <uri id="User Entered Import Resolution 2" name="https://w3id.org/beao/br" uri="beao-br.ttl"/>
-    <uri id="User Entered Import Resolution 3" name="https://w3id.org/beao/icf-alignment" uri="beao-icf-alignment.ttl"/>
-    <uri id="EARL" name="http://www.w3.org/ns/earl" uri="earl.rdf"/>
-    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public"/>
-</catalog>
